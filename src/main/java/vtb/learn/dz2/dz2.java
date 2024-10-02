@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,16 +45,18 @@ public class dz2 {
         //Найдите в списке целых чисел 3-е наибольшее число
         var res2 = list1.stream()
                 .sorted(Comparator.reverseOrder())
-                .toList()
-                .get(2);
+                .limit(3)
+                .sorted()
+                .findFirst();
 //        System.out.println(res2);
 
         //Найдите в списке целых чисел 3-е наибольшее «уникальное» число
         var res3 = list1.stream()
                 .distinct()
                 .sorted(Comparator.reverseOrder())
-                .toList()
-                .get(2);
+                .limit(3)
+                .sorted()
+                .findFirst();
 //        System.out.println(res3);
 
         //необходимо получить список имен 3 самых старших сотрудников с должностью «Инженер», в порядке убывания возраста
@@ -67,15 +70,12 @@ public class dz2 {
         //посчитайте средний возраст сотрудников с должностью «Инженер»
         var res5 = list2.stream()
                 .filter(person -> person.getJobTitle().equals("ИНЖЕНЕР"))
-//                .peek(System.out::println)
                 .collect(Collectors.averagingInt(Person::getAge));
 //        System.out.println(res5);
 
         //Найдите в списке слов самое длинное
         var res6 = list3.stream()
-                .sorted(Comparator.comparingInt(String::length).reversed())
-                .toList()
-                .get(0);
+                .max(Comparator.comparingInt(String::length));
 //        System.out.println(res6);
 
         //Постройте хеш-мапы, в которой будут хранится пары: слово - сколько раз оно встречается во входной строке
@@ -86,7 +86,8 @@ public class dz2 {
         //Отпечатайте в консоль строки из списка в порядке увеличения длины слова, если слова имеют одинаковую длины,
         // то должен быть сохранен алфавитный порядок
         Arrays.stream(st1.split(" "))
-                .sorted(Comparator.comparingInt(String::length))
+                .sorted(Comparator.comparingInt(String::length)
+                        .thenComparing(Function.identity()))
                 .forEach(System.out::println);
 
         //Имеется массив строк, в каждой из которых лежит набор из 5 строк,
@@ -95,7 +96,7 @@ public class dz2 {
                 .map(st -> st.split(" "))
                 .flatMap(Stream::of)
                 .max(Comparator.comparingInt(String::length))
-                .get();
+                .orElseThrow();
 //        System.out.println(res9);
 
     }
